@@ -1,34 +1,275 @@
-HOST: http://www.google.com/
+HOST: https://kidblog.org
 
---- Sample API v2 ---
+--- Kidblog API ---
 ---
-Welcome to the our sample API documentation. All comments can be written in (support [Markdown](http://daringfireball.net/projects/markdown/syntax) syntax)
+Kidblog's API allows users to authorize your application to access protected 
+resources (posts, comments, uploads). See the [OAuth 2.0 spec](http://tools.ietf.org/html/rfc6749) for general information. Kidblog uses the [Authorization Code Grant](http://tools.ietf.org/html/rfc6749#section-4.1)
+login flow designed for server-to-server (i.e. confidential) communication.
+
+TLS/SSL/HTTPS connections are required, and HTTP requests are refused.
+
+
+OAuth 2.0 Login Flow Overview
+----
+
+Your application directs the user to a URL at Kidblog where they will approve (or deny) access to their protected content.
+Upon confirmation, an HTTP redirect will provide your application with an _authorization code_.
+The _authorization code_ is immediately exchanged for an _access token_, 
+which is required for all subsequent requests for protected resources. If the _access token_ expires, 
+your application can submit its _refresh token_, which was provided with the original access token.
+
+
 ---
 
 --
-Shopping Cart Resources
-The following is a section of resources related to the shopping cart
+Authorization
 --
-List products added into your shopping-cart. (comment block again in Markdown)
-GET /shopping-cart
+This endpoint is the initial target of your application's authorization request. It will display a confirmation dialog (and Kidblog login form, if no active session is found) to the user.
+Your application will identify itelf via query string parameters. As such, no private information (such as the client_secret) should be transmitted with this request.
+
+
+Example Request URL
+----
+<pre>
+https://kidblog.org/oauth2/authorize?client_id=8675309&redirect_uri=https%3A%2F%2Fyour-app.com%2Fyour-code-processing-endpoint&response_type=code&kb_class_url=kidblog-class-url&state=ANTI-XSRF
+</pre>
+
+
+Request Details
+----
+
+<table>
+    <thead>
+        <th>Parameter</th><th>Description</th>
+    </thead>
+    <tr>
+        <td>client_id</td><td>Your application's unique client ID provided by Kidblog (not to be confused with client_secret, which is submitted in the next step in exchange for an <em>access token</em>).</td>
+    </tr> 
+    <tr>
+        <td>response_type</td><td>Must be set to "<strong>code</strong>" as defined in the OAuth 2.0 spec for <a href="http://tools.ietf.org/html/rfc6749#section-4.1.1">Authorization Request</a>.</td>
+    </tr> 
+    <tr>
+        <td>redirect_uri</td><td>The endpoint on your server to which the response is sent via HTTP redirect and query string parameters. This URI must exactly match the redirect endpoint registered for your application including the http or https schemes, case, and trailing '/'. A secure (HTTPS) endpoint is recommended but not required.</td>
+    </tr>
+    <tr>
+        <td>kb_class_url</td><td>The user's unique Kidblog class URL. During authorization, Kidblog may need to direct the user to their class login page. The value of this parameter should match the standard URL by which the user accesses their Kidblog content (e.g. http://kidblog.org/THE_CLASS_PATH).
+        Note that the "http://kidblog.org" prefix is not required for the value of this parameter. To acquire this value, the user will need to enter "THE_CLASS_PATH" into your application before being taken to the authorization dialog, or it can be autopopualted based on session information provided by the referral URL to your application (e.g. if a user accesses your site via referral code).</td>
+    </tr>
+    <tr>
+        <td>state</td><td>An <strong>optional</strong> parameter indicating any state which may be useful to your application upon receipt of the response. 
+The value of this parameter will be "round-tripped", so your application receives the same value it sent. 
+Possible uses include redirecting the user to the correct landing page, nonces, and cross-site-request-forgery mitigations.</td>
+    </tr>
+</table>
+
+Example Response (Redirect URI + Authorization Code)
+----
+<pre>
+https://your-app.com/your-code-processing-endpoint?https://www.google.com/?code=77b7f6e9854825de703e5a084bd00ab314591df7&state=ANTI-XSRF
+</pre>
+
+
+Response Details
+----
+
+<table>
+    <thead>
+        <th>Parameter</th><th>Description</th>
+    </thead>
+    <tr>
+        <td>code</td><td>The <em>authorization code</em> that your application will exchange for an <em>access token</em> during the <a href="http://tools.ietf.org/html/rfc6749#section-4.1.3">next phase</a> of the OAuth 2.0 flow. This code can only be used once. Any subsequent attempts to obtain an <em>access token</em> must be made via <em>refresh token</em> (described below). </td>
+    </tr> 
+    <tr>
+        <td>state</td><td>The unaltered, "round-tripped" value your application submitted with the original authorization request.</td>
+    </tr> 
+</table>
+
+Note for the demo json response, there is a simulated error response encountered when troubleshooting query string parameters. A successful request will return an HTML confirmation dialog/login form.
+
+GET /oauth2/authorize
+< 400
+< Content-Type: application/json
+{
+error: "invalid_client",
+error_description: "No client id supplied"
+}
+
+
+
+-- Access Token --
+After obtaining an _authorization code_ in the query string of the redirect URI at your domain (described above), your application should transparently 
+connect to this endpoint using an HTTP client library on your server.
+Your application will exchange the _authorization code_ for an _access token_ by providing your client secret in the payload of the request.
+It's the client secret that validates your application as an authorized bearer of the token. The client secret should be protected like a password and reset if compromised.
+The _authorization code_ has a short shelf life, so it should be exchanged for the _access token_ immediately.
+
+Request Details
+----
+
+<table>
+    <thead>
+        <th>Parameter</th><th>Description</th>
+    </thead>
+    <tr>
+        <td>grant_type</td><td>Must be set to "<strong>authorization_code</strong>" as defined by the <a href="http://tools.ietf.org/html/rfc6749#section-4.1.3">OAuth 2.0 spec</a>.</td>
+    </tr> 
+    <tr>
+        <td>client_id</td><td>Your application's unique client ID provided by Kidblog.</td>
+    </tr> 
+    <tr>
+        <td>client_secret</td><td>Your application's unique client secret provided by Kidblog (must be kept private).</td>
+    </tr>
+    <tr>
+        <td>code</td><td>The <em>authorization code</em> returned from the initial authorization request (described above).</td>
+    </tr>
+    <tr>
+        <td>redirect_uri</td><td>The redirect_uri used as part of the authorization request (above). The <em>authroization code</em> is linked to this value and must match exactly. </td>
+    </tr>
+</table>
+
+Response Details
+----
+
+<table>
+    <thead>
+        <th>Parameter</th><th>Description</th>
+    </thead>
+    <tr>
+        <td>access_token</td><td>The code provided to Kidblog when accessing a protected API resource (e.g. post or comment content)</td>
+    </tr> 
+    <tr>
+        <td>expires_in</td><td>Shelf life of the <em>access token</em>.</td>
+    </tr> 
+    <tr>
+        <td>token_type</td><td>Always returned as "bearer", the usage of which is <a href="http://tools.ietf.org/html/rfc6750#section-2">explained in detail here</a>.
+(See <strong>Resources</strong> section below for specific usage of the "bearer" token type.</td>
+    </tr> 
+    <tr>
+        <td>scope</td><td>The types of resources available using this <em>authorization code</em>. Not currently supported.</td>
+    </tr> 
+    <tr>
+        <td>refresh_token</td><td>Used to obtain a new <em>access token</em>. Your application should safely store the refresh token for later use.</td>
+    </tr> 
+</table>
+
+POST /oauth2/token
+> Content-Type: application/x-www-form-urlencoded
+code=123&client_id=demo&
+client_secret=your_secret&redirect_uri=http%3A%2F%2Fyour-app.com%2Fyour-code-processing-endpoint&
+grant_type=authorization_code
 < 200
 < Content-Type: application/json
-{ "items": [
-  { "url": "/shopping-cart/1", "product":"2ZY48XPZ", "quantity": 1, "name": "New socks", "price": 1.25 }
-] }
-
-Save new products in your shopping cart
-POST /shopping-cart
-> Content-Type: application/json
-{ "product":"1AB23ORM", "quantity": 2 }
-< 201
-< Content-Type: application/json
-{ "status": "created", "url": "/shopping-cart/2" }
+{
+    "access_token": "b529a8e53486eba15a5921ac6fc436cfe990957d",
+    "expires_in": 3600,
+    "token_type": "bearer",
+    "scope": "",
+    "refresh_token": "d401108a3e42486e05747f2c315984f86156e890"
+}
 
 
--- Payment Resources --
-This resource allows you to submit payment information to process your *shopping cart* items
-POST /payment
-{ "cc": "12345678900", "cvc": "123", "expiry": "0112" }
+-- Refresh Token --
+After a relatively short amount of time (~ 1 hour) an _access token_ expires. Rather that requiring the user to reauthorize your application,
+you can exchange a _refresh token_ for a new _access token_. The _refresh token_ was delivered with the _access token_ (above). 
+ Similar to the authorization code exchange, you should use an HTTP client library on your server 
+to connect securely to the refresh token endpoint. Once a refresh token is . 
+
+Request Details
+----
+
+<table>
+    <thead>
+        <th>Parameter</th><th>Description</th>
+    </thead>
+    <tr>
+        <td>grant_type</td><td>Must be set to "<strong>refresh_token</strong>" as defined by the <a href="http://tools.ietf.org/html/rfc6749#section-6">OAuth 2.0 spec</a>.</td>
+    </tr> 
+    <tr>
+        <td>client_id</td><td>Your application's unique client ID provided by Kidblog.</td>
+    </tr> 
+    <tr>
+        <td>client_secret</td><td>Your application's unique client secret provided by Kidblog (must be kept private).</td>
+    </tr>
+    <tr>
+        <td>refresh_token</td><td>The <em>refresh token</em> cached by your application from the initial exchange of the <em>authorization code</em> for an <em>access token</em> (see <strong>Access Token</strong> above).</td>
+    </tr>
+
+</table>
+
+Response Details
+----
+
+<table>
+    <thead>
+        <th>Parameter</th><th>Description</th>
+    </thead>
+    <tr>
+        <td>access_token</td><td>The new token provided to Kidblog when accessing a protected API resource (e.g. post or comment content)</td>
+    </tr> 
+    <tr>
+        <td>expires_in</td><td>Shelf life of the <em>access token</em>.</td>
+    </tr> 
+    <tr>
+        <td>token_type</td><td>Always returned as "bearer", the usage of which is <a href="http://tools.ietf.org/html/rfc6750#section-2">explained in detail here</a>.
+(See <strong>Resources</strong> section below for specific usage of the "bearer" token type.</td>
+    </tr> 
+    <tr>
+        <td>scope</td><td>The types of resources available using this <em>authorization code</em>. Not currently supported.</td>
+    </tr> 
+    <tr>
+        <td>refresh_token</td><td>A new <em>refresh token</em> to cache for later <em>access token</em> requests. The <em>refresh token</em> (just used) in the current request is invalidated, so your application should update the its token cache with this new value.</td>
+    </tr> 
+</table>
+
+POST /oauth2/token
+> Content-Type: application/x-www-form-urlencoded
+code=123&client_id=demo&
+client_secret=your_secret&redirect_uri=http%3A%2F%2Fyour-app.com%2Fyour-code-processing-endpoint&
+grant_type=authorization_code
 < 200
-{ "receipt": "/payment/receipt/1" }
+< Content-Type: application/json
+{
+    "access_token": "b529a8e53486eba15a5921ac6fc436cfe990957d",
+    "expires_in": 3600,
+    "token_type": "bearer",
+    "scope": "",
+    "refresh_token": "d401108a3e42486e05747f2c315984f86156e890"
+}
+
+
+
+-- Resources --
+Once your application has obtained a valid access token, you're ready to request protected resources. 
+
+Resource requests must provide the <em>access token</em> in 
+
+1. the Authorization header, or
+2. the body of a x-www-form-urlencoded POST request
+
+For security, only one of these two methods can be used at a time, and embedding the <em>access token</em> in the query string is not supported.
+
+Request Details
+----
+<table>
+    <thead>
+        <th>Auth Type</th><th>Description</th>
+    </thead>
+    <tr>
+        <td>Authroization Header</td><td>Authorization: Bearer &lt;<em>access_token</em>&gt;</td>
+    </tr> 
+    <tr>
+        <td>POST body</td><td>Content-type: application/x-www-form-urlencoded
+<br>
+access_token=&lt;<em>access_token</em>&gt;</td>
+    </tr> 
+</table>
+
+Note that this endpoint is merely a helper URL to test the status of your access code and the structure of your HTTP request. Obviously, to access actual resources your application will target specific endpoints for the content you want to access.
+
+GET /oauth2/verify
+> Authorization: Bearer <access token>
+< 200
+< Content-Type: application/json
+{
+    "success": true
+}
