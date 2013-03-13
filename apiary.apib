@@ -273,7 +273,7 @@ GET /oauth2/verify
     "success": true
 }
 
--- Folders and Images --
+-- Folders --
 Using the &lt;<em>access_token</em>&gt; received from the OAuth2 provider, you can now access the folders available to the authorized user.
 
 Request Details
@@ -298,7 +298,6 @@ Request Details
     </tr>
 </table>
 
-
 POST /api/v1/folders
 > Content-Type: application/json; 
 { 
@@ -316,5 +315,64 @@ POST /api/v1/folders
     {
         id: "53-54",
         label: "George Castansa in Mr. Peterson&#039;s Class"
+    }
+}
+
+-- Images --
+Using the &lt;<em>access_token</em>&gt; received from the OAuth2 provider, you can now access the folders available to the authorized user.
+
+Request Details
+----
+<table>
+    <thead>
+        <th>Auth Type</th><th>Description</th>
+    </thead>
+    <tr>
+        <td>POST body</td>
+        <td>
+            Content-type: application/json;
+            <table>
+                <thead>
+                    <th>Param</th><th>Value</th>
+                <thead>
+                <tr>
+                    <td>access_token</td><td>&lt;<em>access_token</em>&gt;</td>
+                </tr>
+            </table>    
+        </td>
+    </tr>
+</table>
+<table>
+    <thead>
+        <th>Param</th><th>Value</th>
+    </thead>
+    <tr>
+        <td>id</td>
+        <td>&lt;<em>folder.id</em>&gt;</td>
+    </tr>
+</table>
+POST /api/v1/images/folder/{id}
+> Content-Type: application/json; 
+{ 
+    access_token: "b529a8e53486eba15a5921ac6fc436cfe990957d" 
+}
+< 200
+< Content-Type: application/json
+{
+    status: "ok",
+    total: 3,
+    images: [
+    {
+        src: "https://sandbox.evernote.com/shard/s1/thm/res/72e91467-687d-473a-9b23-34dbbc63b8a9",
+        width: "1024",
+        height: "352"
+    },
+    {
+        src: "https://sandbox.evernote.com/shard/s1/res/72e91467-687d-473a-9b23-34dbbc63b8a9"
+    },
+    {
+        src: "/image.php?action=proxy&image=https%3A%2F%2Fsandbox.evernote.com%2Fshard%2Fs1%2Fres%2F04b7026c-65dc-47da-8bce-cf626c705c94&data=a%3A1%3A%7Bs%3A4%3A%22auth%22%3Bs%3A96%3A%22S%3Ds1%3AU%3D335e0%3AE%3D141c23dd6e0%3AC%3D13a6a8caae0%3AP%3D185%3AA%3Dserenitysoft%3AH%3Dc8032c2fd4fa7507c9d675bf555b78d9%22%3B%7D&params=a%3A1%3A%7Bs%3A15%3A%22image_mime_type%22%3Bs%3A9%3A%22image%2Fpng%22%3B%7D",
+        width: "215",
+        height: "54"
     }
 }
