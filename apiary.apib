@@ -274,7 +274,7 @@ GET /oauth2/verify
 }
 
 -- Resources --
-List classes of which this user is a member. 
+List classes of which this user is a member
 
 GET /api/v1/users/{user_id}/classes
 > Authorization: Bearer <access token>
@@ -284,16 +284,16 @@ GET /api/v1/users/{user_id}/classes
     status: "ok",
     classes: [
     {
-        id: "mrs-adnersons-class",
+        class_id: "mrs-adnersons-class",
         label: "Mrs. Anderson's Class"
     },
     {
-        id: "mr-johnsons-class",
+        class_id: "mr-johnsons-class",
         label: "Mr. Johnson's Class"
     }]
 }
 
-Do something else
+List members of a class
 GET /api/v1/classes/{class_id}/users
 < 200
 < Content-Type: application/json
@@ -312,39 +312,9 @@ GET /api/v1/classes/{class_id}/users
     }]
 }
 
--- Images --
-Using the &lt;<em>access_token</em>&gt; received from the OAuth2 provider, you can now access the folders available to the authorized user.
 
-Request Details
-----
-<table>
-    <thead>
-        <th>Auth Type</th><th>Description</th>
-    </thead>
-    <tr>
-        <td>POST body</td>
-        <td>
-            Content-type: application/json;
-            <table>
-                <thead>
-                    <th>Param</th><th>Value</th>
-                <thead>
-                <tr>
-                    <td>access_token</td><td>&lt;<em>access_token</em>&gt;</td>
-                </tr>
-            </table>    
-        </td>
-    </tr>
-</table>
-<table>
-    <thead>
-        <th>Param</th><th>Value</th>
-    </thead>
-    <tr>
-        <td>id</td>
-        <td>&lt;<em>folder.id</em>&gt;</td>
-    </tr>
-</table>
+List all of the images from posts published by this user in this class
+
 GET /api/v1/classes/{class_id}/users/{user_id}/images
 > Authorization: Bearer <access token>
 < 200
