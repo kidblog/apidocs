@@ -272,3 +272,36 @@ GET /oauth2/verify
 {
     "success": true
 }
+
+-- Folders and Images --
+Using the &lt;<em>access_token</em>&gt; received from the OAuth2 provider, you can now access the folders available to the authorized user.
+
+Request Details
+----
+<table>
+    <thead>
+        <th>Auth Type</th><th>Description</th>
+    </thead>
+    <tr>
+        <td>POST body</td><td>Content-type: application/x-www-form-urlencoded
+<br>
+access_token=&lt;<em>access_token</em>&gt;</td>
+    </tr> 
+</table>
+
+POST /api/v1/folders
+> Content-Type: application/json { access_token: "b529a8e53486eba15a5921ac6fc436cfe990957d" }
+< 200
+< Content-Type: application/json
+{
+    status: "ok",
+    folders: [
+    {
+        id: "53-53",
+        label: "Ryan Peterson in Mr. Peterson&#039;s Class"
+    },
+    {
+        id: "53-54",
+        label: "George Castansa in Mr. Peterson&#039;s Class"
+    }
+}
