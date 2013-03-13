@@ -283,14 +283,27 @@ Request Details
         <th>Auth Type</th><th>Description</th>
     </thead>
     <tr>
-        <td>POST body</td><td>Content-type: application/x-www-form-urlencoded
-<br>
-access_token=&lt;<em>access_token</em>&gt;</td>
-    </tr> 
+        <td>POST body</td>
+        <td>
+            Content-type: application/json;
+            <table>
+                <thead>
+                    <th>Param</th><th>Value</th>
+                <thead>
+                <tr>
+                    <td>access_token</td><td>&lt;<em>access_token</em>&gt;</td>
+                </tr>
+            </table>    
+        </td>
+    </tr>
 </table>
 
+
 POST /api/v1/folders
-> Content-Type: application/json; { access_token: "b529a8e53486eba15a5921ac6fc436cfe990957d" }
+> Content-Type: application/json; 
+{ 
+    access_token: "b529a8e53486eba15a5921ac6fc436cfe990957d" 
+}
 < 200
 < Content-Type: application/json
 {
