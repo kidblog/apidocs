@@ -251,15 +251,15 @@ Request Details
 ----
 <table>
     <thead>
-        <th>Auth Type</th><th>Description</th>
+        <th>Request Type</th><th>HTTP Header</th><th>Value</th>
     </thead>
     <tr>
-        <td>Authroization Header</td><td>Authorization: Bearer &lt;<em>access_token</em>&gt;</td>
+        <td>GET</td><td>Authorization</td><td>Bearer &lt;<em>access_token</em>&gt;</td>
     </tr> 
     <tr>
-        <td>POST body</td><td>Content-type: application/x-www-form-urlencoded
+        <td>POST</td><td>Content-type</td><td>application/x-www-form-urlencoded
 <br>
-access_token=&lt;<em>access_token</em>&gt;</td>
+(POST body)access_token=&lt;<em>access_token</em>&gt;</td>
     </tr> 
 </table>
 
@@ -287,7 +287,7 @@ Request Details
     </tr> 
 </table>
 
-List classes for a user
+
 GET /api/v1/users/{user_id}/classes
 > Authorization: Bearer <access token>
 < 200
