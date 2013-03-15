@@ -345,3 +345,33 @@ GET /api/v1/classes/{class_id}/users/{user_id}/images
         height: "54"
     }]
 }
+
+List all of the posts published by this user in this class
+
+GET /api/v1/classes/{class_id}/users/{user_id}/posts
+> Authorization: Bearer <access token>
+< 200
+< Content-Type: application/json
+{
+    status: "ok",
+    total: 3,
+    posts: [
+    {
+        plain_text: "",
+        html: "",
+        images: [
+            {
+                src: "https://sandbox.evernote.com/shard/s1/res/72e91467-687d-473a-9b23-34dbbc63b8a9",
+                thumbnail: "https://sandbox.evernote.com/shard/s1/thm/res/72e91467-687d-473a-9b23-34dbbc63b8a9-thumb.jpg",
+                mime-type: "image/jpeg"
+            },
+            {
+                src: "/image.php?action=proxy&image=https%3A%2F%2Fsandbox.evernote.com%2Fshard%2Fs1%2Fres%2F04b7026c-65dc-47da-8bce-cf626c705c94&data=a%3A1%3A%7Bs%3A4%3A%22auth%22%3Bs%3A96%3A%22S%3Ds1%3AU%3D335e0%3AE%3D141c23dd6e0%3AC%3D13a6a8caae0%3AP%3D185%3AA%3Dserenitysoft%3AH%3Dc8032c2fd4fa7507c9d675bf555b78d9%22%3B%7D&params=a%3A1%3A%7Bs%3A15%3A%22image_mime_type%22%3Bs%3A9%3A%22image%2Fpng%22%3B%7D",
+                thumbnail: "https://sandbox.evernote.com/shard/s1/thm/res/72e91467-687d-473a-9b23-34dbbc63b8a9-thumb.jpg",
+                mime-type: "image/jpeg",
+                width: "215",
+                height: "54"
+            }
+        ]
+    }
+}
