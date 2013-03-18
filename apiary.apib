@@ -284,11 +284,11 @@ GET /oauth2/verify
 -- User Info --
 With a valid access token, you can retrieve information about the user account that granted access. 
 
-Authenticate your request using the Authorization header of the HTTP request (with value "Bearer &lt;<em>acces_token</em>&gt;" the same as the "/oauth2/verify" endpoint)
+Authenticate your request using the Authorization header of the HTTP request (with value "Bearer &lt;<em>acces_token</em>&gt;" the same as the "[/oauth2/verify](http://docs.kidblog.apiary.io/#verify)" endpoint
 
 You'll need the user's numeric user id to access their resources.
 
-GET /oauth2/verify
+GET /oauth2/userinfo
 > Authorization: Bearer <access token>
 < 200
 < Content-Type: application/json
