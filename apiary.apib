@@ -337,7 +337,7 @@ GET /api/v1/classes/{class_id}/users
 }
 
 
-List all of the images from posts published by this user in this class.
+List the images from posts published by this user in this class.
 
 Request Details
 ----
@@ -359,30 +359,22 @@ GET /api/v1/classes/{class_id}/users/{user_id}/images
 < Content-Type: application/json
 {
     status: "ok",
-    total: 3,
+    total: 2,
     images: [
-    {
-        src: "https://sandbox.evernote.com/shard/s1/thm/res/72e91467-687d-473a-9b23-34dbbc63b8a9",
-        thumbnail: "https://sandbox.evernote.com/shard/s1/thm/res/72e91467-687d-473a-9b23-34dbbc63b8a9-thumb.jpg",
-        width: "1024",
-        height: "352",
-        mime-type: "image/jpeg"
-    },
-    {
-        src: "https://sandbox.evernote.com/shard/s1/res/72e91467-687d-473a-9b23-34dbbc63b8a9",
-        thumbnail: "https://sandbox.evernote.com/shard/s1/thm/res/72e91467-687d-473a-9b23-34dbbc63b8a9-thumb.jpg",
-        mime-type: "image/jpeg"
-    },
-    {
-        src: "/image.php?action=proxy&image=https%3A%2F%2Fsandbox.evernote.com%2Fshard%2Fs1%2Fres%2F04b7026c-65dc-47da-8bce-cf626c705c94&data=a%3A1%3A%7Bs%3A4%3A%22auth%22%3Bs%3A96%3A%22S%3Ds1%3AU%3D335e0%3AE%3D141c23dd6e0%3AC%3D13a6a8caae0%3AP%3D185%3AA%3Dserenitysoft%3AH%3Dc8032c2fd4fa7507c9d675bf555b78d9%22%3B%7D&params=a%3A1%3A%7Bs%3A15%3A%22image_mime_type%22%3Bs%3A9%3A%22image%2Fpng%22%3B%7D",
-        thumbnail: "https://sandbox.evernote.com/shard/s1/thm/res/72e91467-687d-473a-9b23-34dbbc63b8a9-thumb.jpg",
-        mime-type: "image/jpeg",
-        width: "215",
-        height: "54"
-    }]
+        {
+            "src": "http://t0.gstatic.com/images?q=tbn:ANd9GcRxutQxoRVWeWKQ_-TgkEvb1FsUuZ_E9dAPZDf0ufshALdpkCxo7jUZ7TqznA",
+            "width": "266",
+            "height": "189"
+        },
+        {
+            "src": "http://t2.gstatic.com/images?q=tbn:ANd9GcSVzMsePqCSXWbXSQQ1BOofrggQb6TucfAoBMZ4jlZ58u3uKKAr",
+            "width": "275",
+            "height": "183"
+        },
+    ]
 }
 
-List all of the posts published by this user in this class
+List the posts published by this user in this class
 
 Request Details
 ----
@@ -392,7 +384,7 @@ Request Details
         <th>Query String Parameter</th><th>Description</th>
     </thead>
     <tr>
-        <td>limit</td><td>Number of posts return. Default: 10</td>
+        <td>limit</td><td>Number of posts to return. Default: 10</td>
     </tr> 
     <tr>
         <td>offset</td><td>Starting point from which &lt;<em>limit</em>&gt; posts will be returned. Default: 0</td>
@@ -408,14 +400,26 @@ GET /api/v1/classes/{class_id}/users/{user_id}/posts
     "total": 2,
     "data": [
         {
-            "images": [],
-            "html": "<p>Welcome to <a href=\"http://wp3-4dev.rpeterson.happyblogging.org/\">Ryan WP 3.4 Dev Multi-Site</a>. This is your first post. Edit or delete it, then start blogging!</p>\n",
-            "plain_text": "Welcome to Ryan WP 3.4 Dev Multi-Site. This is your first post. Edit or delete it, then start blogging!"
+            "images": [
+                {
+                    "src": "http://www.woodyguthrie.de/wguth02.jpg",
+                    "width": "265",
+                    "height": "200"
+                }
+            ],
+            "html": "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris .</p>",
+            "plain_text": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris "
         },
         {
-            "images": [],
-            "html": "<p>For her this rhyme is penned, whose luminous eyes,<br />\nBrightly expressive as the twins of Leda,<br />\nShall find her own sweet name, that nestling lies<br />\nUpon the page, enwrapped from every reader.<br />\nSearch narrowly the lines!- they hold a treasure<br />\nDivine- a talisman- an amulet<br />\nThat must be worn at heart. Search well the measure-<br />\nThe words- the syllables! Do not forget<br />\nThe trivialest point, or you may lose your labor<br />\nAnd yet there is in this no Gordian knot<br />\nWhich one might not undo without a sabre,<br />\nIf one could merely comprehend the plot.<br />\nEnwritten upon the leaf where now are peering<br />\nEyes scintillating soul, there lie perdus<br />\nThree eloquent words oft uttered in the hearing<br />\nOf poets, by poets- as the name is a poet&#8217;s, too,<br />\nIts letters, although naturally lying<br />\nLike the knight Pinto- Mendez Ferdinando-<br />\nStill form a synonym for Truth- Cease trying!<br />\nYou will not read the riddle, though you do the best you can do.</p>\n",
-            "plain_text": "For her this rhyme is penned, whose luminous eyes,\r\nBrightly expressive as the twins of Leda,\r\nShall find her own sweet name, that nestling lies\r\nUpon the page, enwrapped from every reader.\r\nSearch narrowly the lines!- they hold a treasure\r\nDivine- a talisman- an amulet\r\nThat must be worn at heart. Search well the measure-\r\nThe words- the syllables! Do not forget\r\nThe trivialest point, or you may lose your labor\r\nAnd yet there is in this no Gordian knot\r\nWhich one might not undo without a sabre,\r\nIf one could merely comprehend the plot.\r\nEnwritten upon the leaf where now are peering\r\nEyes scintillating soul, there lie perdus\r\nThree eloquent words oft uttered in the hearing\r\nOf poets, by poets- as the name is a poet's, too,\r\nIts letters, although naturally lying\r\nLike the knight Pinto- Mendez Ferdinando-\r\nStill form a synonym for Truth- Cease trying!\r\nYou will not read the riddle, though you do the best you can do."
+            "images": [
+                {
+                    "src": "http://www.seriesbooks.com/UserFiles/images/Hardy%20Boys/hardyboys046.jpg",
+                    "width": "250",
+                    "height": "310"
+                }
+            ],
+            "html": "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris .</p>",
+            "plain_text": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris "
         }
     ]
 }
