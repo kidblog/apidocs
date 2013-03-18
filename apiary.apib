@@ -92,8 +92,12 @@ Response Details
 Note for the demo json response below, there is a simulated error response encountered when troubleshooting query string parameters. A successful request will return an HTML confirmation dialog/login form.
 
 GET /oauth2/authorize
-< 302
-< Location: https://your-app.com/your-code-processing-endpoint?code=77b7f6e9854825de703e5a084bd00ab314591df7&state=ANTI-XSRF
+< 400
+< Content-Type: application/json
+{
+error: "invalid_client",
+error_description: "No client id supplied"
+}
 
 
 
