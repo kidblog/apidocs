@@ -3,12 +3,13 @@ HOST: https://kidblog.org
 --- Kidblog API ---
 ---
 Kidblog's API allows users to authorize your application to access protected 
-resources (posts, comments, uploads). See the [OAuth 2.0 spec](http://tools.ietf.org/html/rfc6749) for general information. Kidblog uses the [Authorization Code Grant](http://tools.ietf.org/html/rfc6749#section-4.1)
+resources (posts, comments, uploads). See the [OAuth 2.0 spec](http://tools.ietf.org/html/rfc6749) for general information.
+Kidblog uses the [Authorization Code Grant](http://tools.ietf.org/html/rfc6749#section-4.1)
 login flow designed for server-to-server (i.e. confidential) communication.
 
 TLS/SSL/HTTPS connections are required, and HTTP requests are refused.
 
-OAuth 2.0 Login Flow Overview
+OAuth 2.0 Login Flow and Resource Access
 ----
 
 Your application directs the user to a URL at Kidblog where they will approve (or deny) access to their protected content.
@@ -51,8 +52,13 @@ Request Details
         <td>redirect_uri</td><td>The endpoint on your server to which the response is sent via HTTP redirect and query string parameters. This URI must exactly match the redirect endpoint registered for your application including the http or https schemes, case, and trailing '/'. A secure (HTTPS) endpoint is recommended but not required.</td>
     </tr>
     <tr>
-        <td>kb_class_url</td><td>The user's unique Kidblog class URL. During authorization, Kidblog may need to direct the user to their class login page. The value of this parameter should match the standard URL by which the user accesses their Kidblog content (e.g. http://kidblog.org/THE_CLASS_PATH).
+        <td>kb_class_url</td><td>(Required if not sending <em>kb_user_id</em>) The user's unique Kidblog class URL. During authorization, Kidblog may need to direct the user to their class login page. The value of this parameter should match the standard URL by which the user accesses their Kidblog content (e.g. http://kidblog.org/THE_CLASS_PATH).
         Note that the "http://kidblog.org" prefix is not required for the value of this parameter. To acquire this value, the user will need to enter "THE_CLASS_PATH" into your application before being taken to the authorization dialog, or it can be autopopualted based on session information provided by the referral URL to your application (e.g. if a user accesses your site via referral code).</td>
+    </tr>
+    <tr>
+        <td>kb_user_id</td><td>(Required if not sending <em>kb_class_url</em>) The user's unique Kidblog user ID. This ID often takes the form of a UUID v4 character string, though some legacy users will have more tradtional login names as their user ID.
+During authorization, Kidblog may need to direct the user to the login page. The value of this parameter should match the Kidblog ID visible on the user's Kidblog profile page.
+        The user will need to enter their Kidblog ID into your application before being taken to the authorization dialog, or it can be autopopualted based on session information provided by the referral URL to your application (e.g. if a user accesses your site via referral code).</td>
     </tr>
     <tr>
         <td>state</td><td>An <strong>optional</strong> parameter indicating any state which may be useful to your application upon receipt of the response. 
