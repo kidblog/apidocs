@@ -140,7 +140,7 @@ Response Details
         <th>Parameter</th><th>Description</th>
     </thead>
     <tr>
-        <td>access_token</td><td>The code provided to Kidblog when accessing a protected API resource (e.g. post or comment content)</td>
+        <td>access_token</td><td>The code you'll provid to Kidblog when accessing a protected API resource (e.g. blog post content)</td>
     </tr> 
     <tr>
         <td>expires_in</td><td>Shelf life of the <em>access token</em>.</td>
@@ -177,7 +177,7 @@ grant_type=authorization_code
 After a relatively short amount of time (~ 1 hour) an _access token_ expires. Rather that requiring the user to reauthorize your application,
 you can exchange a _refresh token_ for a new _access token_. The _refresh token_ was delivered with the _access token_ (above). 
  Similar to the authorization code exchange, you should use an HTTP client library on your server 
-to connect securely to the refresh token endpoint. Once a refresh token is . 
+to connect securely to the refresh token endpoint. Once a refresh token is used, it cannot be used again so your application will need to update its refresh token with a new one retirned with the new access token. 
 
 Request Details
 ----
@@ -228,7 +228,7 @@ Response Details
 
 POST /oauth2/token
 > Content-Type: application/x-www-form-urlencoded
-code=123&client_id=demo&
+code=abc&client_id=demo&
 client_secret=your_secret&redirect_uri=http%3A%2F%2Fyour-app.com%2Fyour-code-processing-endpoint&
 grant_type=authorization_code
 < 200
