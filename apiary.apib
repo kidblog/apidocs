@@ -337,8 +337,22 @@ GET /api/v1/classes/{class_id}/users
 }
 
 
-List all of the images from posts published by this user in this class
+List all of the images from posts published by this user in this class.
 
+Request Details
+----
+
+<table>
+    <thead>
+        <th>Parameter</th><th>Description</th>
+    </thead>
+    <tr>
+        <td>limit</td><td>Number of posts (containing an image) to search. Because a post can contain more than one image, the return array may contain more than this number of images. Default: 10</td>
+    </tr> 
+    <tr>
+        <td>offset</td><td>Starting point from which &lt;<em>limit</em>&gt; posts will be searched.</td>
+    </tr> 
+</table>
 GET /api/v1/classes/{class_id}/users/{user_id}/images
 > Authorization: Bearer <access token>
 < 200
