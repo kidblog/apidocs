@@ -52,11 +52,11 @@ Request Details
         <td>redirect_uri</td><td>The endpoint on your server to which the response is sent via HTTP redirect and query string parameters. This URI must exactly match the redirect endpoint registered for your application including the http or https schemes, case, and trailing '/'. A secure (HTTPS) endpoint is recommended but not required.</td>
     </tr>
     <tr>
-        <td>kb_class_url</td><td>(Required if not sending <em>kb_user_id</em>) The user's unique Kidblog class URL. During authorization, Kidblog may need to direct the user to their class login page. The value of this parameter should match the standard URL by which the user accesses their Kidblog content (e.g. http://kidblog.org/THE_CLASS_PATH).
+        <td>kb_class_url</td><td>(Required if not sending <em>kb_user_login</em>) The user's unique Kidblog class URL. During authorization, Kidblog may need to direct the user to their class login page. The value of this parameter should match the standard URL by which the user accesses their Kidblog content (e.g. http://kidblog.org/THE_CLASS_PATH).
         Note that the "http://kidblog.org" prefix is not required for the value of this parameter. To acquire this value, the user will need to enter "THE_CLASS_PATH" into your application before being taken to the authorization dialog, or it can be autopopualted based on session information provided by the referral URL to your application (e.g. if a user accesses your site via referral code).</td>
     </tr>
     <tr>
-        <td>kb_user_id</td><td>(Required if not sending <em>kb_class_url</em>) The user's unique Kidblog user ID. This ID often takes the form of a UUID v4 character string, though some legacy users will have more tradtional login names as their user ID.
+        <td>kb_user_login</td><td>(Required if not sending <em>kb_class_url</em>) The user's unique Kidblog user ID. This ID often takes the form of a UUID v4 character string, though some legacy users will have more tradtional login names as their user ID.
 During authorization, Kidblog may need to direct the user to the login page. The value of this parameter should match the Kidblog ID visible on the user's Kidblog profile page.
         The user will need to enter their Kidblog ID into your application before being taken to the authorization dialog, or it can be autopopualted based on session information provided by the referral URL to your application (e.g. if a user accesses your site via referral code).</td>
     </tr>
@@ -269,7 +269,7 @@ Request Details
     </tr> 
 </table>
 
-Note that this endpoint is merely a helper URL to test the status of your access code and the structure of your HTTP request. Obviously, to access actual resources your application will target specific endpoints for the content you want to access.
+This endpoint is a helper URL to verify the status of your access code and to ensure that the access code being presented was indeed assigned to your application/client. To access content for a particular user, your application will target specific endpoints for the desired resources.
 
 GET /oauth2/verify
 > Authorization: Bearer <access token>
@@ -279,6 +279,22 @@ GET /oauth2/verify
     "success": true,
     "client_id": "8675309",
     "user_id": "1234"
+}
+
+-- User Info --
+With a valid access token, you can retrieve information about the user account that granted access. 
+
+Authenticate your request using the Authorization header of the HTTP request (with value "Bearer &lt;<em>acces_token</em>&gt;" the same as the "/oauth2/verify" endpoint)
+
+You'll need the user's numeric user id to access their resources.
+
+GET /oauth2/verify
+> Authorization: Bearer <access token>
+< 200
+< Content-Type: application/json
+{
+    "user_id": "1234",
+    "display_name": "Mrs. Anderson"
 }
 
 -- Resources --
