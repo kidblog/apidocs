@@ -344,7 +344,7 @@ Request Details
 
 <table>
     <thead>
-        <th>Parameter</th><th>Description</th>
+        <th>Query String Parameter</th><th>Description</th>
     </thead>
     <tr>
         <td>limit</td><td>Number of posts (containing an image) to search. Because a post can contain more than one image, the return array may contain more than this number of images. Default: 10</td>
@@ -383,6 +383,21 @@ GET /api/v1/classes/{class_id}/users/{user_id}/images
 }
 
 List all of the posts published by this user in this class
+
+Request Details
+----
+
+<table>
+    <thead>
+        <th>Query String Parameter</th><th>Description</th>
+    </thead>
+    <tr>
+        <td>limit</td><td>Number of posts return. Default: 10</td>
+    </tr> 
+    <tr>
+        <td>offset</td><td>Starting point from which &lt;<em>limit</em>&gt; posts will be returned. Default: 0</td>
+    </tr> 
+</table>
 
 GET /api/v1/classes/{class_id}/users/{user_id}/posts
 > Authorization: Bearer <access token>
