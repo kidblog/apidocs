@@ -2,7 +2,8 @@ HOST: https://kidblog.org
 
 --- Kidblog API ---
 ---
-Kidblog's API allows users to authorize your application to access protected resources (posts, comments, uploads). See the [OAuth 2.0 spec](http://tools.ietf.org/html/rfc6749) for general information. Kidblog uses the [Authorization Code Grant](http://tools.ietf.org/html/rfc6749#section-4.1)
+Kidblog's API allows users to authorize your application to access protected resources (posts, comments, uploads).
+See the [OAuth 2.0 spec](http://tools.ietf.org/html/rfc6749) for general information. Kidblog uses the [Authorization Code Grant](http://tools.ietf.org/html/rfc6749#section-4.1)
 login flow designed for server-to-server (i.e. confidential) communication.
 
 TLS/SSL/HTTPS connections are required, and HTTP requests are refused.
@@ -15,7 +16,6 @@ Upon confirmation, an HTTP redirect will provide your application with an _autho
 The _authorization code_ is immediately exchanged for an _access token_, 
 which is required for all subsequent requests for protected resources. If the _access token_ expires, 
 your application can submit its _refresh token_, which was provided with the original access token.
-
 
 ---
 
